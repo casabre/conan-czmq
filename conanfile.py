@@ -1,7 +1,7 @@
 #!/usr/bin/env python
 # -*- coding: utf-8 -*-
 
-from conans import ConanFile, tools, VisualStudioBuildEnvironment
+from conans import ConanFile, tools, VisualStudioBuildEnvironment, AutoToolsBuildEnvironment
 import os
 
 
@@ -15,6 +15,14 @@ class LibnameConan(ConanFile):
     settings = "os", "arch", "compiler", "build_type"
     options = {"shared": [True, False]}
     default_options = "shared=False"
+
+    def system_requirements(self):
+        if self.settings.os == 'Linux' and tools.os_info.is_linux:
+            if tools.os_info.with_apt:
+                installer = tools.SystemPackageTool()
+                packages = ['autoconf', 'automake', 'libtool-bin']
+                for package in packages:
+                    installer.install(package)
 
     def requirements(self):
         self.requires.add('zmq/[>=4.2.2]@bincrafters/stable')
@@ -76,7 +84,28 @@ class LibnameConan(ConanFile):
             self.run(command)
 
     def build_configure(self):
-        raise Exception("todo")
+        with tools.chdir("sources"):
+            self.run('./autogen.sh')
+            env_build = AutoToolsBuildEnvironment(self)
+            if str(self.settings.compiler) in ['clang', 'gcc', 'apple-clang']:
+                # workaround for linking C++ library (zmq) into c code (czmq)
+                if str(self.settings.compiler.libcxx) in ['libstdc++', 'libstdc++11']:
+                    env_build.libs.append('stdc++')
+                elif str(self.settings.compiler.libcxx) == 'libc++':
+                    env_build.libs.append('c++')
+                # workaround for unused variables
+                env_build.flags.append('-Wno-unused-variable')
+                env_build.flags.append('-Wno-unused-function')
+                env_build.flags.append('-Wno-unused-but-set-variable')
+            prefix = os.path.abspath(self.package_folder)
+            args = ['--prefix=%s' % prefix]
+            if self.options.shared:
+                args.extend(['--disable-static', '--enable-shared'])
+            else:
+                args.extend(['--disable-shared', '--enable-static'])
+            env_build.configure(args=args)
+            env_build.make()
+            env_build.make(args=['install'])
 
     def build(self):
         if self.settings.compiler == 'Visual Studio':
