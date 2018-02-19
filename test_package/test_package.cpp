@@ -11,5 +11,9 @@ int main (void)
 
     zsock_destroy (&pull);
     zsock_destroy (&push);
+    // https://github.com/zeromq/zproto/pull/384
+#if defined (__WINDOWS__)
+    zsys_shutdown();
+#endif
     return 0;
 }
