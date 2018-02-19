@@ -60,7 +60,8 @@ class LibnameConan(ConanFile):
 
     def package_info(self):
         if self.settings.compiler == 'Visual Studio':
-            self.cpp_info.libs = ['libczmq', 'rpcrt4']
+            self.cpp_info.libs = ['czmq' if self.options.shared else 'libczmq']
+            self.cpp_info.libs.append('rpcrt4')
         else:
             self.cpp_info.libs = ['czmq']
         if not self.options.shared:
