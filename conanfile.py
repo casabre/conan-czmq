@@ -31,7 +31,7 @@ class LibnameConan(ConanFile):
                     installer.install(package)
 
     def requirements(self):
-        self.requires.add('zmq/[>=4.2.2]@bincrafters/stable')
+        self.requires.add('zmq/4.2.2@bincrafters/stable')
 
     def source(self):
         source_url = "https://github.com/zeromq/czmq"
@@ -56,7 +56,7 @@ class LibnameConan(ConanFile):
         cmake.install()
 
     def package(self):
-        self.copy(pattern="LICENSE", src='sources', dst='license')
+        self.copy(pattern="LICENSE", src='sources', dst='licenses')
 
     def package_info(self):
         if self.settings.compiler == 'Visual Studio':
