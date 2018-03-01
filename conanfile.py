@@ -22,14 +22,6 @@ class LibnameConan(ConanFile):
         if self.settings.compiler == 'Visual Studio':
             del self.options.fPIC
 
-    def system_requirements(self):
-        if self.settings.os == 'Linux' and tools.os_info.is_linux:
-            if tools.os_info.with_apt:
-                installer = tools.SystemPackageTool()
-                packages = ['autoconf', 'automake', 'libtool-bin']
-                for package in packages:
-                    installer.install(package)
-
     def requirements(self):
         self.requires.add('zmq/[>=4.2.2]@bincrafters/stable')
 
