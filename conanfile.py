@@ -49,7 +49,7 @@ class LibnameConan(ConanFile):
         cmake.install()
 
     def package(self):
-        self.copy(pattern="LICENSE", src='sources', dst='license')
+        self.copy(pattern="LICENSE", src='sources', dst='licenses')
         if self.options.shared:
             exts = ['*.a']
         else:
