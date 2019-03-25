@@ -1,0 +1,73 @@
+diff --git a/CMakeLists.txt b/CMakeLists.txt
+index 0605c3e..924d120 100644
+--- a/CMakeLists.txt
++++ b/CMakeLists.txt
+@@ -108,6 +108,10 @@ if (CYGWIN)
+     set(MORE_LIBRARIES)
+ endif()
+ 
++if (UNIX)
++    set(MORE_LIBRARIES m)
++endif()
++
+ list(APPEND CMAKE_MODULE_PATH "${SOURCE_DIR}")
+ set(OPTIONAL_LIBRARIES)
+ 
+@@ -438,26 +442,6 @@ target_link_libraries(
+     ${OPTIONAL_LIBRARIES}
+ )
+ endif()
+-add_executable(
+-    test_randof
+-    "${SOURCE_DIR}/src/test_randof.c"
+-)
+-if (TARGET czmq)
+-target_link_libraries(
+-    test_randof
+-    czmq
+-    ${LIBZMQ_LIBRARIES}
+-    ${OPTIONAL_LIBRARIES}
+-)
+-endif()
+-if (NOT TARGET czmq AND TARGET czmq-static)
+-target_link_libraries(
+-    test_randof
+-    czmq-static
+-    ${LIBZMQ_LIBRARIES}
+-    ${OPTIONAL_LIBRARIES}
+-)
+-endif()
+ add_executable(
+     czmq_selftest
+     "${SOURCE_DIR}/src/czmq_selftest.c"
+@@ -540,22 +524,6 @@ IF (ENABLE_DRAFTS)
+     )
+ ENDIF (ENABLE_DRAFTS)
+ 
+-
+-add_custom_target(
+-    copy-selftest-ro ALL
+-    COMMAND ${CMAKE_COMMAND} -E copy_directory ${CMAKE_SOURCE_DIR}/src/selftest-ro ${CMAKE_BINARY_DIR}/src/selftest-ro
+-)
+-
+-add_custom_target(
+-    make-selftest-rw ALL
+-    COMMAND ${CMAKE_COMMAND} -E make_directory ${CMAKE_BINARY_DIR}/src/selftest-rw
+-)
+-
+-set_directory_properties(
+-    PROPERTIES
+-    ADDITIONAL_MAKE_CLEAN_FILES "${CMAKE_BINARY_DIR}/src/selftest-ro;${CMAKE_BINARY_DIR}/src/selftest-rw"
+-)
+-
+ foreach(TEST_CLASS ${TEST_CLASSES})
+     add_test(
+         NAME ${TEST_CLASS}
+@@ -592,7 +560,6 @@ set(cmake_generated ${CMAKE_BINARY_DIR}/CMakeCache.txt
+                     ${CMAKE_BINARY_DIR}/src/czmq_selftest
+                     ${CMAKE_BINARY_DIR}/src/zmakecert
+                     ${CMAKE_BINARY_DIR}/src/zsp
+-                    ${CMAKE_BINARY_DIR}/src/test_randof
+                     ${CMAKE_BINARY_DIR}/src/czmq_selftest
+ )
+ 
