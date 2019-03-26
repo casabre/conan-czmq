@@ -49,17 +49,10 @@ class CZMQConan(ConanFile):
         cmake.configure()
         return cmake
 
-    def _build_cmake(self):
-        cmake = self._configure_cmake()
-        cmake.build()
-
     def build(self):
         tools.patch(base_path=self._source_subfolder, patch_file="czmq.diff")
-        if self.settings.compiler == 'Visual Studio':
-            with tools.vcvars(self.settings, force=True, filter_known_paths=False):
-                self._build_cmake()
-        else:
-            self._build_cmake()
+        cmake = self._configure_cmake()
+        cmake.build()
 
     def package(self):
         self.copy(pattern="LICENSE", src=self._source_subfolder, dst='licenses')
