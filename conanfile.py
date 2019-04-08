@@ -32,7 +32,7 @@ class CZMQConan(ConanFile):
             self.build_requires.add('ninja_installer/1.8.2@bincrafters/stable')
 
     def requirements(self):
-        self.requires.add('zmq/4.2.2@bincrafters/stable')
+        self.requires.add('zmq/4.2.5@bincrafters/stable')
         if self.options.lz4:
             self.requires.add('lz4/1.8.3@bincrafters/stable')
         if self.options.uuid:
