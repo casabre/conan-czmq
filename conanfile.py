@@ -23,7 +23,8 @@ class CZMQConan(ConanFile):
     def config_options(self):
         if self.settings.compiler == 'Visual Studio':
             del self.options.fPIC
-        if self.settings.os == "Macos":
+        if self.settings.os == "Macos" and self.options.uuid:
+            self.output.warn("czmq doesn't support external libuuid on MacOS")
             self.options.uuid = False
 
     def build_requirements(self):
