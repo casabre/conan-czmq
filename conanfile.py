@@ -20,12 +20,14 @@ class CZMQConan(ConanFile):
     generators = ['cmake']
     _source_subfolder = "source_subfolder"
 
-    def configure(self):
+    def config_options(self):
         if self.settings.compiler == 'Visual Studio':
             del self.options.fPIC
+        if self.settings.os == "Macos":
+            self.options.uuid = False
 
     def build_requirements(self):
-        if not tools.which("ninja"):
+        if not tools.which("ninja") and self.settings.compiler == 'Visual Studio':
             self.build_requires.add('ninja_installer/1.8.2@bincrafters/stable')
 
     def requirements(self):
