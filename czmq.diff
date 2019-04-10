@@ -1,0 +1,82 @@
+diff --git a/CMakeLists.txt b/CMakeLists.txt
+index 0605c3e..a941e01 100644
+--- a/CMakeLists.txt
++++ b/CMakeLists.txt
+@@ -13,8 +13,6 @@ enable_testing()
+ 
+ set(SOURCE_DIR "${CMAKE_CURRENT_SOURCE_DIR}")
+ set(CMAKE_EXPORT_COMPILE_COMMANDS 1)
+-# Select flags
+-SET(CMAKE_C_FLAGS_RELEASE "-O3")
+ 
+ # Will be used to add flags to pkg-config useful when apps want to statically link
+ set(pkg_config_libs_private "")
+@@ -108,6 +106,10 @@ if (CYGWIN)
+     set(MORE_LIBRARIES)
+ endif()
+ 
++if (UNIX AND NOT APPLE)
++    set(MORE_LIBRARIES m)
++endif()
++
+ list(APPEND CMAKE_MODULE_PATH "${SOURCE_DIR}")
+ set(OPTIONAL_LIBRARIES)
+ 
+@@ -438,26 +440,6 @@ target_link_libraries(
+     ${OPTIONAL_LIBRARIES}
+ )
+ endif()
+-add_executable(
+-    test_randof
+-    "${SOURCE_DIR}/src/test_randof.c"
+-)
+-if (TARGET czmq)
+-target_link_libraries(
+-    test_randof
+-    czmq
+-    ${LIBZMQ_LIBRARIES}
+-    ${OPTIONAL_LIBRARIES}
+-)
+-endif()
+-if (NOT TARGET czmq AND TARGET czmq-static)
+-target_link_libraries(
+-    test_randof
+-    czmq-static
+-    ${LIBZMQ_LIBRARIES}
+-    ${OPTIONAL_LIBRARIES}
+-)
+-endif()
+ add_executable(
+     czmq_selftest
+     "${SOURCE_DIR}/src/czmq_selftest.c"
+@@ -540,22 +522,6 @@ IF (ENABLE_DRAFTS)
+     )
+ ENDIF (ENABLE_DRAFTS)
+ 
+-
+-add_custom_target(
+-    copy-selftest-ro ALL
+-    COMMAND ${CMAKE_COMMAND} -E copy_directory ${CMAKE_SOURCE_DIR}/src/selftest-ro ${CMAKE_BINARY_DIR}/src/selftest-ro
+-)
+-
+-add_custom_target(
+-    make-selftest-rw ALL
+-    COMMAND ${CMAKE_COMMAND} -E make_directory ${CMAKE_BINARY_DIR}/src/selftest-rw
+-)
+-
+-set_directory_properties(
+-    PROPERTIES
+-    ADDITIONAL_MAKE_CLEAN_FILES "${CMAKE_BINARY_DIR}/src/selftest-ro;${CMAKE_BINARY_DIR}/src/selftest-rw"
+-)
+-
+ foreach(TEST_CLASS ${TEST_CLASSES})
+     add_test(
+         NAME ${TEST_CLASS}
+@@ -592,7 +558,6 @@ set(cmake_generated ${CMAKE_BINARY_DIR}/CMakeCache.txt
+                     ${CMAKE_BINARY_DIR}/src/czmq_selftest
+                     ${CMAKE_BINARY_DIR}/src/zmakecert
+                     ${CMAKE_BINARY_DIR}/src/zsp
+-                    ${CMAKE_BINARY_DIR}/src/test_randof
+                     ${CMAKE_BINARY_DIR}/src/czmq_selftest
+ )
+ 
