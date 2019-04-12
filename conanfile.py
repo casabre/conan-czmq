@@ -26,13 +26,16 @@ class CZMQConan(ConanFile):
         if self.settings.os == "Macos" and self.options.uuid:
             self.output.warn("czmq doesn't support external libuuid on MacOS")
             self.options.uuid = False
+        elif self.settings.os == "Windows" and self.options.uuid:
+            self.output.warn("czmq doesn't support external libuuid on Windows")
+            self.options.uuid = False
 
     def build_requirements(self):
         if not tools.which("ninja") and self.settings.compiler == 'Visual Studio':
             self.build_requires.add('ninja_installer/1.8.2@bincrafters/stable')
 
     def requirements(self):
-        self.requires.add('zmq/4.2.2@bincrafters/stable')
+        self.requires.add('zmq/4.2.5@bincrafters/stable')
         if self.options.lz4:
             self.requires.add('lz4/1.8.3@bincrafters/stable')
         if self.options.uuid:
