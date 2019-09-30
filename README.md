@@ -2,7 +2,7 @@
 
 | Bintray | Windows | Linux & macOS | 
 |:--------:|:---------:|:-----------------:|
-|[![Download](https://api.bintray.com/packages/bincrafters/public-conan/czmq%3Abincrafters/images/download.svg) ](https://bintray.com/bincrafters/public-conan/czmq%3Abincrafters/_latestVersion)|[![Build status](https://ci.appveyor.com/api/projects/status/github/bincrafters/conan-czmq?svg=true)](https://ci.appveyor.com/project/bincrafters/conan-czmq)|[![Build Status](https://travis-ci.org/bincrafters/conan-czmq.svg)](https://travis-ci.org/bincrafters/conan-czmq)|
+|[![Download](https://api.bintray.com/packages/bincrafters/public-conan/czmq%3Abincrafters/images/download.svg) ](https://bintray.com/bincrafters/public-conan/czmq%3Abincrafters/_latestVersion)|[![Build status](https://ci.appveyor.com/api/projects/status/github/bincrafters/conan-czmq?svg=true)](https://ci.appveyor.com/project/bincrafters/conan-czmq)|[![Build Status](https://travis-ci.com/bincrafters/conan-czmq.svg)](https://travis-ci.com/bincrafters/conan-czmq)|
 
 ## Conan.io Information
 

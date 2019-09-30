@@ -37,7 +37,7 @@ class CZMQConan(ConanFile):
     def requirements(self):
         self.requires.add('zmq/4.2.5@bincrafters/stable')
         if self.options.lz4:
-            self.requires.add('lz4/1.8.3@bincrafters/stable')
+            self.requires.add('lz4/1.9.2')
         if self.options.uuid:
             self.requires.add('libuuid/1.0.3@bincrafters/stable')
 
