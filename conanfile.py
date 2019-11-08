@@ -1,4 +1,3 @@
-# -*- coding: utf-8 -*-
 import os
 from conans import ConanFile, tools, CMake
 
@@ -9,7 +8,6 @@ class CZMQConan(ConanFile):
     url = "https://github.com/bincrafters/conan-czmq"
     homepage = "https://github.com/zeromq/czmq"
     description = "High-level C binding for ØMQ"
-    author = "Bincrafters <bincrafters@gmail.com>"
     license = "MPL-2.0"
     exports = ["LICENSE.md"]
     topics = ("conan", "czmq", "zmq", "zeromq", "message-queue", "asynchronous")
@@ -32,14 +30,14 @@ class CZMQConan(ConanFile):
 
     def build_requirements(self):
         if not tools.which("ninja") and self.settings.compiler == 'Visual Studio':
-            self.build_requires.add('ninja_installer/1.8.2@bincrafters/stable')
+            self.build_requires.add('ninja/1.9.0')
 
     def requirements(self):
         self.requires.add('zmq/4.2.5@bincrafters/stable')
         if self.options.lz4:
             self.requires.add('lz4/1.9.2')
         if self.options.uuid:
-            self.requires.add('libuuid/1.0.3@bincrafters/stable')
+            self.requires.add('libuuid/1.0.3')
 
     def source(self):
         sha256 = "2e87c19988d1168b70d7ec0fdce79aba4e92a6330959c3a2576c72b319acb478"
