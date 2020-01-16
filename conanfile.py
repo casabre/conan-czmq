@@ -4,17 +4,20 @@ from conans import ConanFile, tools, CMake
 
 class CZMQConan(ConanFile):
     name = "czmq"
-    version = "4.1.0"
+    version = "4.2.0"
     url = "https://github.com/bincrafters/conan-czmq"
     homepage = "https://github.com/zeromq/czmq"
     description = "High-level C binding for ØMQ"
     license = "MPL-2.0"
     exports = ["LICENSE.md"]
-    topics = ("conan", "czmq", "zmq", "zeromq", "message-queue", "asynchronous")
+    topics = ("conan", "czmq", "zmq", "zeromq",
+              "message-queue", "asynchronous")
     exports_sources = ['CMakeLists.txt', 'czmq.diff']
     settings = "os", "arch", "compiler", "build_type"
-    options = {"shared": [True, False], "fPIC": [True, False], "lz4": [True, False], "uuid": [True, False]}
-    default_options = {"shared": False, "fPIC": True, "lz4": True, "uuid": True}
+    options = {"shared": [True, False], "fPIC": [
+        True, False], "lz4": [True, False], "uuid": [True, False]}
+    default_options = {"shared": False,
+                       "fPIC": True, "lz4": True, "uuid": True}
     generators = ['cmake']
     _source_subfolder = "source_subfolder"
 
@@ -25,7 +28,8 @@ class CZMQConan(ConanFile):
             self.output.warn("czmq doesn't support external libuuid on MacOS")
             self.options.uuid = False
         elif self.settings.os == "Windows" and self.options.uuid:
-            self.output.warn("czmq doesn't support external libuuid on Windows")
+            self.output.warn(
+                "czmq doesn't support external libuuid on Windows")
             self.options.uuid = False
 
     def build_requirements(self):
@@ -33,15 +37,16 @@ class CZMQConan(ConanFile):
             self.build_requires.add('ninja/1.9.0')
 
     def requirements(self):
-        self.requires.add('zmq/4.2.5@bincrafters/stable')
+        self.requires.add('zmq/4.3.2@bincrafters/stable')
         if self.options.lz4:
             self.requires.add('lz4/1.9.2')
         if self.options.uuid:
             self.requires.add('libuuid/1.0.3')
 
     def source(self):
-        sha256 = "2e87c19988d1168b70d7ec0fdce79aba4e92a6330959c3a2576c72b319acb478"
-        tools.get("{0}/archive/v{1}.tar.gz".format(self.homepage, self.version), sha256=sha256)
+        sha256 = "31185090b500b64855003be2450ced00efa6b58544639acfc68aa13c9ec249f8"
+        tools.get("{0}/archive/v{1}.tar.gz".format(self.homepage,
+                                                   self.version), sha256=sha256)
         extracted_dir = self.name + "-" + self.version
         os.rename(extracted_dir, self._source_subfolder)
 
