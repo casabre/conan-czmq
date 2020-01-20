@@ -20,6 +20,7 @@ class CZMQConan(ConanFile):
                        "fPIC": True, "lz4": True, "uuid": True}
     generators = ['cmake']
     _source_subfolder = "source_subfolder"
+    _build_subfolder = "build_subfolder"
 
     def config_options(self):
         if self.settings.compiler == 'Visual Studio':
@@ -55,7 +56,7 @@ class CZMQConan(ConanFile):
         cmake = CMake(self, generator=generator)
         cmake.definitions["CZMQ_BUILD_SHARED"] = self.options.shared
         cmake.definitions["CZMQ_BUILD_STATIC"] = not self.options.shared
-        cmake.configure()
+        cmake.configure(build_dir=self._build_subfolder)
         return cmake
 
     def build(self):
