@@ -12,7 +12,7 @@ class CZMQConan(ConanFile):
     exports = ["LICENSE.md"]
     topics = ("conan", "czmq", "zmq", "zeromq",
               "message-queue", "asynchronous")
-    exports_sources = ['CMakeLists.txt', 'czmq.diff']
+    exports_sources = ['CMakeLists.txt', 'czmq.diff', 'Findczmq.cmake']
     settings = "os", "arch", "compiler", "build_type"
     options = {"shared": [True, False], "fPIC": [
         True, False], "lz4": [True, False], "uuid": [True, False]}
@@ -65,6 +65,7 @@ class CZMQConan(ConanFile):
         cmake.build()
 
     def package(self):
+        self.copy('Findczmq.cmake')
         self.copy(pattern="LICENSE", src=self._source_subfolder, dst='licenses')
         cmake = self._configure_cmake()
         cmake.install()
